@@ -11,5 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "type-testing": "^0.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
   }
 }
