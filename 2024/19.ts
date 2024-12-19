@@ -4,6 +4,8 @@ type SyntaxNode =
   | { type: "VariableDeclaration"; id: string }
   | { type: "CallExpression"; argument: string };
 
+type VariableDeclarations = "let" | "var" | "const";
+
 type TrimStart<S extends string> = S extends `${infer Head}${infer Tail}`
   ? Head extends " " | "\n" | "\t" | "\r"
     ? TrimStart<Tail>
@@ -11,15 +13,11 @@ type TrimStart<S extends string> = S extends `${infer Head}${infer Tail}`
   : S;
 
 type ParseSyntaxNode<Statement extends string> =
-  Statement extends `let ${infer Id} = ${string}`
+  Statement extends `${VariableDeclarations} ${infer Id} = ${string}`
     ? { type: "VariableDeclaration"; id: Id }
-    : Statement extends `const ${infer Id} = ${string}`
-      ? { type: "VariableDeclaration"; id: Id }
-      : Statement extends `var ${infer Id} = ${string}`
-        ? { type: "VariableDeclaration"; id: Id }
-        : Statement extends `${string}(${infer Id})`
-          ? { type: "CallExpression"; argument: Id }
-          : never;
+    : Statement extends `${string}(${infer Id})`
+      ? { type: "CallExpression"; argument: Id }
+      : never;
 
 type Parse<
   Source,
